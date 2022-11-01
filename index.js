@@ -1,3 +1,7 @@
+/* import platform from "./img/platform.pn"
+console.log(platform) */
+
+const platformImg = document.getElementById("platformImg")
 const canvas = document.querySelector("canvas")
 const c = canvas.getContext("2d")
 
@@ -42,7 +46,7 @@ class Player {
         this.draw()
         this.position.y += this.velocity.y;
         this.position.x += this.velocity.x;
-        // define bottom Max
+        // define bottom Max ground constraint
         if(this.position.y + this.height + this.velocity.y <= canvas.height){
             this.velocity.y += gravity}
         else {
@@ -67,18 +71,78 @@ const keys = {
     }
 }
 
+// define win condition variable
+let scrollOffset = 0
+
+
+// DEFINE SCENARIO DINAMICS 
+
+
+// create new class Platform
+class Platform {
+    constructor ({ x, y }){
+        this.position = {
+            x, // = x: x,
+            y // = y: y,
+        }
+
+        this.width = 200
+        this.height = 20
+    }
+
+    draw(){
+        c.fillStyle = "blue"
+        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+    }
+    // 36.50
+}
+
+// create platform array
+const platforms = [new Platform({x: 200, y: 100}), new Platform({x: 500, y: 200})]
 
 // define animate
 function animate(){
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
     player.update()
+    platforms.forEach(platform => {
+        platform.draw()
+    })
 
-    if (keys.right.pressed){
+    // player moving l/r && player hasn't passed points x/y of moving background
+    if (keys.right.pressed && player.position.x < 400){
         player.velocity.x = 5
-    } else if (keys.left.pressed){
+    } else if (keys.left.pressed && player.position.x > 100){
         player.velocity.x = -5
-    } else {player.velocity.x = 0}
+    // else stop moving & move backgroud if key pressed
+    } else {player.velocity.x = 0
+    
+    if (keys.right.pressed){
+    // move platform to left when player is moving to the right
+    scrollOffset += 5;
+    platforms.forEach(platform => {
+        platform.position.x -= 5
+    })
+    } else if (keys.left.pressed){
+        scrollOffset -= 5
+        platforms.forEach(platform => {
+            platform.position.x += 5
+        })
+        if (scrollOffset > 2000){
+            console.log("You win!")
+        }
+    }
+}
+
+console.log(scrollOffset)
+
+    // player/platform collision:
+    // when not only player is above platform but && player is going down and collides with upper platform surface && player is above the platform (x axys)
+    platforms.forEach(platform => {
+        if (player.position.y + player.height <= platform.position.y && player.position.y + player.height + player.velocity.y >= platform.position.y && player.position.x + player.width >= platform.position.x && player.position.x <= platform.position.x + platform.width){
+            player.velocity.y = 0
+        }
+    })
 }
 
 
@@ -127,21 +191,3 @@ window.addEventListener("keyup", ({ keyCode }) => {
             break;
     }
 })
-
-
-// DEFINE SCENARIO DINAMICS 
-
-class Platform {
-    constructor (){
-        this.position = {
-            x: 0,
-            y: 0,
-        }
-
-        this.width = 200
-        this.height = 20
-    }
-
-    draw()
-    // 36.50
-}
