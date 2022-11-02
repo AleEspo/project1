@@ -1,14 +1,19 @@
 /* import platform from "./img/platform.pn"
 console.log(platform) */
 
-const platformImg = document.getElementById("platformImg")
 const canvas = document.querySelector("canvas")
 const c = canvas.getContext("2d")
 
 
+const platformImg = document.getElementById("platformImg")
+platformImg.setAttribute("src", "./img/platform.png")
+
+
+
 // define canvas width / height 
-canvas.width = window.innerWidth ;
-canvas.height = window.innerHeight ;
+canvas.width = 1024 ;
+canvas.height = 576 ;
+//canvas.setAttribute("border" , "1px solid red")
 
 
 
@@ -80,34 +85,48 @@ let scrollOffset = 0
 
 // create new class Platform
 class Platform {
-    constructor ({ x, y }){
+    constructor ({ x, y, image }){
         this.position = {
             x, // = x: x,
-            y // = y: y,
+            y, // = y: y,
         }
 
-        this.width = 200
-        this.height = 20
+        this.image = image ;
+
+        this.width = image.naturalWidth
+        this.height = image.naturalHeight
     }
 
     draw(){
-        c.fillStyle = "blue"
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        c.drawImage(this.image, this.position.x, this.position.y)
     }
-    // 36.50
 }
 
 // create platform array
-const platforms = [new Platform({x: 200, y: 100}), new Platform({x: 500, y: 200})]
+const platforms = [
+    new Platform({
+    x: -1, 
+    y: 480,
+    image: platformImg,
+}),
+new Platform({
+    x: platformImg.naturalWidth - 3 , 
+    y: 480, 
+    image: platformImg,
+})]
+
+
 
 // define animate
 function animate(){
     requestAnimationFrame(animate)
-    c.clearRect(0, 0, canvas.width, canvas.height)
-    player.update()
+    c.fillStyle = "white"
+    c.fillRect(0, 0, canvas.width, canvas.height)
     platforms.forEach(platform => {
         platform.draw()
     })
+    player.update()
+
 
     // player moving l/r && player hasn't passed points x/y of moving background
     if (keys.right.pressed && player.position.x < 400){
