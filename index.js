@@ -311,10 +311,32 @@ function animate(){
     })
 }
 
+// let currentKey
+// // sprite switching conditional
+// if (keys.right.pressed && currentKey === "right" && player.currentSprite !== player.sprites.run.right){
+//     player.frames = 1
+//     player.currentSprite = player.sprites.run.right
+//     player.currentCropWidth = player.sprites.run.cropWidth
+//     player.width = player.sprites.run.width
+// } else if (keys.left.pressed && customElements === "left" && player.currentSprite !== player.sprites.run.left){
+//     player.frames = 1
+//     player.currentSprite = player.sprites.run.left
+//     player.currentCropWidth = player.sprites.run.cropWidth
+//     player.width = player.sprites.run.width
+// } else if (!keys.right.pressed && currentKey === "right" && player.currentSprite !== player.sprites.stand.right){
+//     player.frames = 1
+//     player.currentSprite = player.sprites.stand.right
+//     player.currentCropWidth = player.sprites.stand.cropWidth
+//     player.width = player.sprites.stand.width
+// } else if (!keys.left.pressed && currentKey === "left" && player.currentSprite !== player.sprites.stand.left){
+//     player.frames = 1
+//     player.currentSprite = player.sprites.stand.left
+//     player.currentCropWidth = player.sprites.stand.cropWidth
+//     player.width = player.sprites.stand.width
+// }
 
 // invoke animate
 animate()
-
 
 // Event listener keydown
 window.addEventListener("keydown", ({ keyCode }) => {
@@ -329,7 +351,10 @@ window.addEventListener("keydown", ({ keyCode }) => {
         case 87:
             // console.log("up")
             // define jump -> position -20 + 1.5 di gravity ... position + 0 ... position - gravity till velocity = 0
-            player.velocity.y -= 25;
+            // no double jump
+            if (player.position.y > 180){
+                player.velocity.y -= 25
+            }
             break;
         case 68:
             // console.log("right")
