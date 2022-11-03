@@ -1,6 +1,11 @@
 const canvas = document.querySelector("canvas")
 const c = canvas.getContext("2d")
 
+
+// define canvas width / height 
+canvas.width = 1024 ;
+canvas.height = 576 ;
+
 // Implement create image function
 
 // import platform from "./img/platform.png"
@@ -10,59 +15,6 @@ const c = canvas.getContext("2d")
 //     image.src = platform
 //     return image
 // }
-
-// define initializing function ?
-
-// function createImage (imageName) {
-//     const imageName = new Image
-//     (imageName + "Img").setAttribute("src", "./img/"+(imageName + "Img")+".png")
-//      return const?
-// }
-
-const platformImg = new Image
-platformImg.setAttribute("src", "./img/platform.png")
-
-const backgroundImg = new Image
-backgroundImg.setAttribute("src", "./img/background.png")
-
-const hillsImg = new Image
-hillsImg.setAttribute("src", "./img/hills.png")
-
-const platformSmallTallImg = new Image
-platformSmallTallImg.setAttribute("src", "./img/platformSmallTall.png")
-
-const spriteRunLeftImg = new Image
-spriteRunLeftImg.setAttribute("src", "./img/spriteRunLeft.png")
-
-const spriteRunRightImg = new Image
-spriteRunRightImg.setAttribute("src", "./img/spriteRunRight.png")
-
-const spriteStandLeftImg = new Image
-spriteStandLeftImg.setAttribute("src", "./img/spriteStandLeft.png")
-
-const spriteStandRightImg = new Image
-spriteStandRightImg.setAttribute("src", "./img/spriteStandRight.png")
-
-
-
-
-// define canvas width / height 
-canvas.width = 1024 ;
-canvas.height = 576 ;
-//canvas.setAttribute("border" , "1px solid red")
-
-
-// DEFINE INIT FUNCTION
-// function initi(){   ...   }
-
-
-// DEFINE PLAYER DINAMICS
-
-
-// define gravity const
-const gravity = 1.5
-const speed = 6
-
 
 // create Player class
 class Player {
@@ -138,30 +90,6 @@ class Player {
     }
 }
 
-
-
-// create new player
-const player = new Player()
-player.update()
-
-
-// constant movement +20 px, not velcicty ++20px
-const keys = {
-    right: {
-        pressed: false
-    },
-    left : {
-        pressed: false
-    }
-}
-
-// define win condition variable
-let scrollOffset = 0
-
-
-// DEFINE SCENARIO DINAMICS 
-
-
 // create new class Platform
 class Platform {
     constructor ({ x, y, image }){
@@ -181,8 +109,86 @@ class Platform {
     }
 }
 
+// define GenericObject class (no platform collision funnction)
+class GenericObject {
+    constructor ({ x, y, image }){
+        this.position = {
+            x, // = x: x,
+            y, // = y: y,
+        }
+
+        this.image = image ;
+
+        this.width = image.naturalWidth
+        this.height = image.naturalHeight
+    }
+
+    draw(){
+        c.drawImage(this.image, this.position.x, this.position.y)
+    }
+}
+
+// define initializing function ?
+
+// function createImage (imageName) {
+//     const imageName = new Image
+//     (imageName + "Img").setAttribute("src", "./img/"+(imageName + "Img")+".png")
+//      return const?
+// }
+// // DEFINE INIT FUNCTION
+// function init(){
+
+const platformImg = new Image
+platformImg.setAttribute("src", "./img/platform.png")
+
+const backgroundImg = new Image
+backgroundImg.setAttribute("src", "./img/background.png")
+
+const hillsImg = new Image
+hillsImg.setAttribute("src", "./img/hills.png")
+
+const platformSmallTallImg = new Image
+platformSmallTallImg.setAttribute("src", "./img/platformSmallTall.png")
+
+const spriteRunLeftImg = new Image
+spriteRunLeftImg.setAttribute("src", "./img/spriteRunLeft.png")
+
+const spriteRunRightImg = new Image
+spriteRunRightImg.setAttribute("src", "./img/spriteRunRight.png")
+
+const spriteStandLeftImg = new Image
+spriteStandLeftImg.setAttribute("src", "./img/spriteStandLeft.png")
+
+const spriteStandRightImg = new Image
+spriteStandRightImg.setAttribute("src", "./img/spriteStandRight.png")
+
+
+// define gravity const
+const gravity = 1.5
+const speed = 6
+
+
+// create new player
+let player = new Player()
+player.update()
+
+
+// constant movement +20 px, not velcicty ++20px
+let keys = {
+    right: {
+        pressed: false
+    },
+    left : {
+        pressed: false
+    }
+}
+
+// define win condition variable
+let scrollOffset = 0
+
+
 // create platform array
-const platforms = [
+let platforms = [
 new Platform({
     x: platformImg.naturalWidth * 5 + 298 - platformSmallTallImg.naturalWidth, 
     y: 270, 
@@ -220,27 +226,9 @@ new Platform({
 })
 ]
 
-// define GenericObject class (no platform collision funnction)
-class GenericObject {
-    constructor ({ x, y, image }){
-        this.position = {
-            x, // = x: x,
-            y, // = y: y,
-        }
-
-        this.image = image ;
-
-        this.width = image.naturalWidth
-        this.height = image.naturalHeight
-    }
-
-    draw(){
-        c.drawImage(this.image, this.position.x, this.position.y)
-    }
-}
 
 // create background from GenericObject
-const genericObjects = [
+let genericObjects = [
     new GenericObject({
         x: -1,
         y: -1,
@@ -298,16 +286,20 @@ function animate(){
 
     // win condition
     if (scrollOffset > platformImg.naturalWidth * 5 + 250 - 2){
-        setTimeout(() => { window.alert("You win!")}, 500)
+        setTimeout(() => {
+            window.alert("You win! Play again")
+            location.reload()
+        }, 500)
     }
             
     // lose condition
     if (player.position.y > canvas.height) {
-        setTimeout(() => { window.alert("You lose!")}, 500)
-        init()
+        setTimeout(() => {
+            window.alert("Game over :( Try again!")
+            location.reload()
+        }, 500)
     }
 }
-
     // player/platform collision:
     // when not only player is above platform but && player is going down and collides with upper platform surface && player is above the platform (x axys)
     platforms.forEach(platform => {
@@ -317,47 +309,22 @@ function animate(){
     })
 }
 
-// let currentKey
-
-// // sprite switching conditional
-
-// if (keys.right.pressed && currentKey === "right" && player.currentSprite !== player.sprites.run.right){
-//     player.frames = 1
-//     player.currentSprite = player.sprites.run.right
-//     player.currentCropWidth = player.sprites.run.cropWidth
-//     player.width = player.sprites.run.width
-// } else if (keys.left.pressed && currentKey === "left" && player.currentSprite !== player.sprites.run.left){
-//     player.frames = 1
-//     player.currentSprite = player.sprites.run.left
-//     player.currentCropWidth = player.sprites.run.cropWidth
-//     player.width = player.sprites.run.width
-// } else if (!keys.right.pressed && currentKey === "right" && player.currentSprite !== player.sprites.stand.right){
-//     player.frames = 1
-//     player.currentSprite = player.sprites.stand.right
-//     player.currentCropWidth = player.sprites.stand.cropWidth
-//     player.width = player.sprites.stand.width
-// } else if (!keys.left.pressed && currentKey === "left" && player.currentSprite !== player.sprites.stand.left){
-//     player.frames = 1
-//     player.currentSprite = player.sprites.stand.left
-//     player.currentCropWidth = player.sprites.stand.cropWidth
-//     player.width = player.sprites.stand.width
-// }
 
 // invoke animate
 animate()
 
 // Event listener keydown
-window.addEventListener("keydown", ({ keyCode }) => {
-    switch(keyCode){
-        case 65:
+window.addEventListener("keydown", ({ key }) => {
+    switch(key){
+        case "a":
             // console.log("left")
             keys.left.pressed = true
             player.currentSprite = player.sprites.run.left
             player.currentCropWidth = player.sprites.run.cropWidth
             player.width = player.sprites.run.width
-            // currentKey = "left"
+            // lastKeyPressed = "left"
             break;
-        case 87:
+        case "w":
             // console.log("up")
             // define jump -> position -20 + 1.5 di gravity ... position + 0 ... position - gravity till velocity = 0
             // no double jump
@@ -365,42 +332,64 @@ window.addEventListener("keydown", ({ keyCode }) => {
                 player.velocity.y -= 25
             }
             break;
-        case 68:
+        case "d":
             // console.log("right")
             keys.right.pressed = true
             player.currentSprite = player.sprites.run.right
             player.currentCropWidth = player.sprites.run.cropWidth
             player.width = player.sprites.run.width
-            // currentKey = "right"
-            break;
-        case 83:
-            // console.log("down")
+            // lastKeyPressed = "right"
             break;
     }
 })
 
 // event listener keyup
-window.addEventListener("keyup", ({ keyCode }) => {
-    switch(keyCode){
-        case 65:
+window.addEventListener("keyup", ({ key }) => {
+    switch(key){
+        case "a":
             // console.log("left")
             keys.left.pressed = false
             player.currentSprite = player.sprites.stand.left
             player.currentCropWidth = player.sprites.stand.cropWidth
             player.width = player.sprites.stand.width
+            // lastKeyPressed = "left"
             break;
-        case 87:
-            // console.log("up")
-            break;
-        case 68:
+        case "d":
             // console.log("right")
             keys.right.pressed = false
             player.currentSprite = player.sprites.stand.right
             player.currentCropWidth = player.sprites.stand.cropWidth
             player.width = player.sprites.stand.width
-            break;
-        case 83:
-            // console.log("down")
+            // lastKeyPressed = "right"
             break;
     }
 })
+
+
+// let lastKeyPressed
+
+// // sprite switching conditional
+
+// if (keys.right.pressed && lastKeyPressed === "right" && player.currentSprite !== player.sprites.run.right){
+//     player.frames = 1
+//     player.currentSprite = player.sprites.run.right
+//     player.currentCropWidth = player.sprites.run.cropWidth
+//     player.width = player.sprites.run.width
+// } else if (keys.left.pressed && lastKeyPressed === "left" && player.currentSprite !== player.sprites.run.left){
+//     player.frames = 1
+//     player.currentSprite = player.sprites.run.left
+//     player.currentCropWidth = player.sprites.run.cropWidth
+//     player.width = player.sprites.run.width
+// } else if (!keys.right.pressed && lastKeyPressed === "right" && player.currentSprite !== player.sprites.stand.right){
+//     player.frames = 1
+//     player.currentSprite = player.sprites.stand.right
+//     player.currentCropWidth = player.sprites.stand.cropWidth
+//     player.width = player.sprites.stand.width
+// } else if (!keys.left.pressed && lastKeyPressed === "left" && player.currentSprite !== player.sprites.stand.left){
+//     player.frames = 1
+//     player.currentSprite = player.sprites.stand.left
+//     player.currentCropWidth = player.sprites.stand.cropWidth
+//     player.width = player.sprites.stand.width
+// }
+
+
