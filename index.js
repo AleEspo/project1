@@ -16,6 +16,45 @@ canvas.height = 576 ;
 //     return image
 // }
 
+// define initializing function ?
+
+// function createImage (imageName) {
+//     const imageName = new Image
+//     (imageName + "Img").setAttribute("src", "./img/"+(imageName + "Img")+".png")
+//      return const?
+// }
+// // DEFINE INIT FUNCTION
+// function init(){
+
+const platformImg = new Image
+platformImg.setAttribute("src", "./img/platform.png")
+
+const backgroundImg = new Image
+backgroundImg.setAttribute("src", "./img/background.png")
+
+const hillsImg = new Image
+hillsImg.setAttribute("src", "./img/hills.png")
+
+const platformSmallTallImg = new Image
+platformSmallTallImg.setAttribute("src", "./img/platformSmallTall.png")
+
+const spriteRunLeftImg = new Image
+spriteRunLeftImg.setAttribute("src", "./img/spriteRunLeft.png")
+
+const spriteRunRightImg = new Image
+spriteRunRightImg.setAttribute("src", "./img/spriteRunRight.png")
+
+const spriteStandLeftImg = new Image
+spriteStandLeftImg.setAttribute("src", "./img/spriteStandLeft.png")
+
+const spriteStandRightImg = new Image
+spriteStandRightImg.setAttribute("src", "./img/spriteStandRight.png")
+
+
+// define gravity const
+const gravity = 1.5
+const speed = 6
+
 // create Player class
 class Player {
     constructor (){
@@ -127,45 +166,6 @@ class GenericObject {
         c.drawImage(this.image, this.position.x, this.position.y)
     }
 }
-
-// define initializing function ?
-
-// function createImage (imageName) {
-//     const imageName = new Image
-//     (imageName + "Img").setAttribute("src", "./img/"+(imageName + "Img")+".png")
-//      return const?
-// }
-// // DEFINE INIT FUNCTION
-// function init(){
-
-const platformImg = new Image
-platformImg.setAttribute("src", "./img/platform.png")
-
-const backgroundImg = new Image
-backgroundImg.setAttribute("src", "./img/background.png")
-
-const hillsImg = new Image
-hillsImg.setAttribute("src", "./img/hills.png")
-
-const platformSmallTallImg = new Image
-platformSmallTallImg.setAttribute("src", "./img/platformSmallTall.png")
-
-const spriteRunLeftImg = new Image
-spriteRunLeftImg.setAttribute("src", "./img/spriteRunLeft.png")
-
-const spriteRunRightImg = new Image
-spriteRunRightImg.setAttribute("src", "./img/spriteRunRight.png")
-
-const spriteStandLeftImg = new Image
-spriteStandLeftImg.setAttribute("src", "./img/spriteStandLeft.png")
-
-const spriteStandRightImg = new Image
-spriteStandRightImg.setAttribute("src", "./img/spriteStandRight.png")
-
-
-// define gravity const
-const gravity = 1.5
-const speed = 6
 
 
 // create new player
