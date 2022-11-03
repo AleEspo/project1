@@ -1,6 +1,3 @@
-/* import platform from "./img/platform.pn"
-console.log(platform) */
-
 const canvas = document.querySelector("canvas")
 const c = canvas.getContext("2d")
 
@@ -14,23 +11,43 @@ const c = canvas.getContext("2d")
 //     return image
 // }
 
-const platformImg = document.getElementById("platformImg")
+// define initializing function
+
+const platformImg = new Image
 platformImg.setAttribute("src", "./img/platform.png")
 
-const backgroundImg = document.getElementById("backgroundImg")
+const backgroundImg = new Image
 backgroundImg.setAttribute("src", "./img/background.png")
 
-const hillsImg = document.getElementById("hillsImg")
+const hillsImg = new Image
 hillsImg.setAttribute("src", "./img/hills.png")
+
+const platformSmallTallImg = new Image
+platformSmallTallImg.setAttribute("src", "./img/platformSmallTall.png")
+
+const spriteRunLeftImg = new Image
+spriteRunLeftImg.setAttribute("src", "./img/spriteRunLeft.png")
+
+const spriteRunRightImg = new Image
+spriteRunRightImg.setAttribute("src", "./img/spriteRunRight.png")
+
+const spriteStandLeftImg = new Image
+spriteStandLeftImg.setAttribute("src", "./img/spriteStandLeft.png")
+
+const spriteStandRightImg = new Image
+spriteStandRightImg.setAttribute("src", "./img/spriteStandRight.png")
 
 
 
 
 // define canvas width / height 
-canvas.width = 1024;
+canvas.width = 1024 ;
 canvas.height = 576 ;
 //canvas.setAttribute("border" , "1px solid red")
 
+
+// DEFINE INIT FUNCTION
+// function initi(){   ...   }
 
 
 // DEFINE PLAYER DINAMICS
@@ -38,6 +55,7 @@ canvas.height = 576 ;
 
 // define gravity const
 const gravity = 1.5
+const speed = 6
 
 
 // create Player class
@@ -54,16 +72,55 @@ class Player {
             y: 1,
         }
 
-        this.width = 30
-        this.height = 30
+        this.width = 66
+        this.height = 150
+        this.speed = 10
+        this.image = spriteStandRightImg
+        this.frames = 0 
+        // define sprites objects for each action
+        this.sprites = {
+            stand: {
+                left: spriteStandLeftImg,
+                right: spriteStandRightImg,
+                cropWidth: 177,
+                width: 66
+            },
+            run: {
+                left: spriteRunLeftImg,
+                right: spriteRunRightImg,
+                cropWidth: 341,
+                width: 127.875
+            }
+        }
+        // define variables for each actions
+        this.currentSprite = this.sprites.stand.right
+        this.currentCropWidth = this.sprites.stand.cropWidth
     }
-
-    draw() {
-        c.fillStyle = "red"
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+    
+    // draw sprites
+    draw(){
+        c.drawImage(
+          this.currentSprite,
+          this.currentCropWidth * this.frames,
+          0,
+          this.currentCropWidth,
+          400,
+          this.position.x,
+          this.position.y,
+          this.width,
+          this.height
+        );
     }
 
     update(){
+        this.frames++
+
+        if (this.frames > 59 && (this.currentSprite === this.sprites.stand.right || this.currentSprite === this.sprites.stand.left)){
+            this.frames = 0
+        } else if (this.frames > 29 && (this.currentSprite === this.sprites.run.right || this.currentSprite === this.sprites.run.left)){
+            this.frames = 0
+        }
+
         this.draw()
         this.position.y += this.velocity.y;
         this.position.x += this.velocity.x;
@@ -75,8 +132,6 @@ class Player {
     }
 }
 
-// define initializing function
-//function init(){}
 
 
 // create new player
@@ -122,7 +177,12 @@ class Platform {
 
 // create platform array
 const platforms = [
-    new Platform({
+new Platform({
+    x: platformImg.naturalWidth * 5 + 298 - platformSmallTallImg.naturalWidth, 
+    y: 270, 
+    image: platformSmallTallImg,
+}),
+new Platform({
     x: -1, 
     y: 480,
     image: platformImg,
@@ -134,6 +194,21 @@ new Platform({
 }),
 new Platform({
     x: platformImg.naturalWidth * 2 + 100 , 
+    y: 480, 
+    image: platformImg,
+}),
+new Platform({
+    x: platformImg.naturalWidth * 3 + 300 , 
+    y: 480, 
+    image: platformImg,
+}),
+new Platform({
+    x: platformImg.naturalWidth * 4 + 300 - 2 , 
+    y: 480, 
+    image: platformImg,
+}),
+new Platform({
+    x: platformImg.naturalWidth * 5 + 650 - 2 , 
     y: 480, 
     image: platformImg,
 })
@@ -190,38 +265,39 @@ function animate(){
 
     // player moving l/r && player hasn't passed points x/y of moving background
     if (keys.right.pressed && player.position.x < 400){
-        player.velocity.x = 5
-    } else if (keys.left.pressed && player.position.x > 100){
-        player.velocity.x = -5
+        player.velocity.x = player.speed
+    } else if ((keys.left.pressed && player.position.x > 100) || keys.left.pressed && scrollOffset === 0 && player.position.x > 0){
+        player.velocity.x = -player.speed
     // else stop moving & move backgroud if key pressed
     } else {player.velocity.x = 0
     
     if (keys.right.pressed){
     // move platform to left when player is moving to the right
-    scrollOffset += 5;
+    scrollOffset += player.speed;
     platforms.forEach(platform => {
-        platform.position.x -= 5
+        platform.position.x -= player.speed
     })
     genericObjects.forEach(genericObject => {
-        genericObject.position.x -= 3
-    })
-    } else if (keys.left.pressed){
-        scrollOffset -= 5
+        genericObject.position.x -= player.speed * 0.66
+    }) // if player goes left from initial position, don't scroll
+    } else if (keys.left.pressed && scrollOffset > 0){
+        scrollOffset -= player.speed
         platforms.forEach(platform => {
-            platform.position.x += 5
+            platform.position.x += player.speed
         })
         genericObjects.forEach(genericObject => {
-            genericObject.position.x += 3
+            genericObject.position.x += player.speed * 0.66
         })
     }
+
     // win condition
-    if (scrollOffset > 2000){
-        console.log("You win!")
+    if (scrollOffset > platformImg.naturalWidth * 5 + 250 - 2){
+        alert("You win!"), 3000
     }
     
     // lose condition
     if (player.position.y > canvas.height) {
-        console.log("You lose!")
+    alert("You lose!"), 3000
         init()
     }
 }
@@ -246,15 +322,21 @@ window.addEventListener("keydown", ({ keyCode }) => {
         case 65:
             // console.log("left")
             keys.left.pressed = true
+            player.currentSprite = player.sprites.run.left
+            player.currentCropWidth = player.sprites.run.cropWidth
+            player.width = player.sprites.run.width
             break;
         case 87:
             // console.log("up")
             // define jump -> position -20 + 1.5 di gravity ... position + 0 ... position - gravity till velocity = 0
-            player.velocity.y -= 20;
+            player.velocity.y -= 25;
             break;
         case 68:
             // console.log("right")
             keys.right.pressed = true
+            player.currentSprite = player.sprites.run.right
+            player.currentCropWidth = player.sprites.run.cropWidth
+            player.width = player.sprites.run.width
             break;
         case 83:
             // console.log("down")
@@ -268,6 +350,9 @@ window.addEventListener("keyup", ({ keyCode }) => {
         case 65:
             // console.log("left")
             keys.left.pressed = false
+            player.currentSprite = player.sprites.stand.left
+            player.currentCropWidth = player.sprites.stand.cropWidth
+            player.width = player.sprites.stand.width
             break;
         case 87:
             // console.log("up")
@@ -275,6 +360,9 @@ window.addEventListener("keyup", ({ keyCode }) => {
         case 68:
             // console.log("right")
             keys.right.pressed = false
+            player.currentSprite = player.sprites.stand.right
+            player.currentCropWidth = player.sprites.stand.cropWidth
+            player.width = player.sprites.stand.width
             break;
         case 83:
             // console.log("down")
