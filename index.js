@@ -63,76 +63,78 @@ if (window.screen.availWidth > 768){
     // alert box AWD
     window.alert("Goodmorning Astronaut, are you ready to play? \nIn order to win the game, you need to reach the last platform.\nWatch out for the pits on the ground! \n\nPress 'd' to go right, 'a' to go left and 'w' to jump.\n\nGood luck ;D")
 
-} else if (window.screen.availWidth <= 768){
+} 
 
-    // define mobile canvas size (max?)
+// if (window.screen.availWidth <= 768){
 
-    canvas.width = window.screen.availHeight
-    canvas.height = window.screen.availWidth
+//     // define mobile canvas size (max?)
 
-
-    // div left
-
-    const leftSide = document.getElementById("left")
-    leftSide.setAttribute("widht", "50%")
-    leftSide.setAttribute("position", "absolute")
-    leftSide.setAttribute("height", "500px")
-    leftSide.setAttribute("left", "50%")
+//     canvas.width = window.screen.availHeight
+//     canvas.height = window.screen.availWidth
 
 
-    // div right
+//     // div left
 
-    const rightSide = document.getElementById("right")
-    rightSide.setAttribute("widht", "50%")
-    rightSide.setAttribute("position", "absolute")
-    rightSide.setAttribute("height", "500px")
-
-
-    // right side touch event
-
-    rightSide.addEventListener("touchstart",()=>{
-        keys.right.pressed = true
-        player.currentSprite = player.sprites.run.right
-        player.currentCropWidth = player.sprites.run.cropWidth
-        player.width = player.sprites.run.width
-    })
-
-    rightSide.addEventListener("touchmove",()=>{
-        if (player.position.y > 110){
-            player.velocity.y -= 25
-        }
-        pullEffect.currentTime = 0.4
-        pullEffect.play()
-    })
-
-    rightSide.addEventListener("touchend",()=>{
-        keys.left.pressed = false
-        player.currentSprite = player.sprites.stand.left
-        player.currentCropWidth = player.sprites.stand.cropWidth
-        player.width = player.sprites.stand.width
-    })
-
-    // left side touch event
-
-    leftSide.addEventListener("touchstart",()=>{
-                keys.right.pressed = true
-                player.currentSprite = player.sprites.run.right
-                player.currentCropWidth = player.sprites.run.cropWidth
-                player.width = player.sprites.run.width
-    })
+//     const leftSide = document.getElementById("left")
+//     leftSide.setAttribute("widht", "50%")
+//     leftSide.setAttribute("position", "absolute")
+//     leftSide.setAttribute("height", "500px")
+//     leftSide.setAttribute("left", "50%")
 
 
-    leftSide.addEventListener("touchend",()=>{
-        keys.right.pressed = false
-        player.currentSprite = player.sprites.stand.right
-        player.currentCropWidth = player.sprites.stand.cropWidth
-        player.width = player.sprites.stand.width
-    })
+//     // div right
 
-    // alert box AWD
-    window.alert("Goodmorning Astronaut, are you ready to play? \nIn order to win the game, you need to reach the last platform.\nWatch out for the pits on the ground! \n\nTap the right side of the screen to go right, the left one to go left and tap twice on the right side to jump.\n\nGood luck ;D")
+//     const rightSide = document.getElementById("right")
+//     rightSide.setAttribute("widht", "50%")
+//     rightSide.setAttribute("position", "absolute")
+//     rightSide.setAttribute("height", "500px")
 
-}
+
+//     // right side touch event
+
+//     rightSide.addEventListener("touchstart",()=>{
+//         keys.right.pressed = true
+//         player.currentSprite = player.sprites.run.right
+//         player.currentCropWidth = player.sprites.run.cropWidth
+//         player.width = player.sprites.run.width
+//     })
+
+//     rightSide.addEventListener("touchmove",()=>{
+//         if (player.position.y > 110){
+//             player.velocity.y -= 25
+//         }
+//         pullEffect.currentTime = 0.4
+//         pullEffect.play()
+//     })
+
+//     rightSide.addEventListener("touchend",()=>{
+//         keys.left.pressed = false
+//         player.currentSprite = player.sprites.stand.left
+//         player.currentCropWidth = player.sprites.stand.cropWidth
+//         player.width = player.sprites.stand.width
+//     })
+
+//     // left side touch event
+
+//     leftSide.addEventListener("touchstart",()=>{
+//                 keys.right.pressed = true
+//                 player.currentSprite = player.sprites.run.right
+//                 player.currentCropWidth = player.sprites.run.cropWidth
+//                 player.width = player.sprites.run.width
+//     })
+
+
+//     leftSide.addEventListener("touchend",()=>{
+//         keys.right.pressed = false
+//         player.currentSprite = player.sprites.stand.right
+//         player.currentCropWidth = player.sprites.stand.cropWidth
+//         player.width = player.sprites.stand.width
+//     })
+
+//     // alert box AWD
+//     window.alert("Goodmorning Astronaut, are you ready to play? \nIn order to win the game, you need to reach the last platform.\nWatch out for the pits on the ground! \n\nTap the right side of the screen to go right, the left one to go left and tap twice on the right side to jump.\n\nGood luck ;D")
+
+// }
 
 // Implement create image function
 
