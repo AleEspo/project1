@@ -3,8 +3,136 @@ const c = canvas.getContext("2d")
 
 
 // define canvas width / height 
-canvas.width = 1024 ;
-canvas.height = 576 ;
+if (window.screen.availWidth > 768){
+    canvas.width = 1024 ;
+    canvas.height = 576 ;
+
+    window.addEventListener("keydown", ({ key }) => {
+        switch(key){
+            case "a":
+                // console.log("left")
+                keys.left.pressed = true
+                player.currentSprite = player.sprites.run.left
+                player.currentCropWidth = player.sprites.run.cropWidth
+                player.width = player.sprites.run.width
+                // lastKeyPressed = "left"
+                break;
+            case "w":
+                // console.log("up")
+                // define jump -> position -20 + 1.5 di gravity ... position + 0 ... position - gravity till velocity = 0
+                // no double jump
+                if (player.position.y > 110){
+                    player.velocity.y -= 25
+                }
+                pullEffect.currentTime = 0.4
+                pullEffect.play()
+                break;
+            case "d":
+                // console.log("right")
+                keys.right.pressed = true
+                player.currentSprite = player.sprites.run.right
+                player.currentCropWidth = player.sprites.run.cropWidth
+                player.width = player.sprites.run.width
+                // lastKeyPressed = "right"
+                break;
+        }
+    })
+    
+    // event listener keyup
+    window.addEventListener("keyup", ({ key }) => {
+        switch(key){
+            case "a":
+                // console.log("left")
+                keys.left.pressed = false
+                player.currentSprite = player.sprites.stand.left
+                player.currentCropWidth = player.sprites.stand.cropWidth
+                player.width = player.sprites.stand.width
+                // lastKeyPressed = "left"
+                break;
+            case "d":
+                // console.log("right")
+                keys.right.pressed = false
+                player.currentSprite = player.sprites.stand.right
+                player.currentCropWidth = player.sprites.stand.cropWidth
+                player.width = player.sprites.stand.width
+                // lastKeyPressed = "right"
+                break;
+        }
+    })
+
+    // alert box AWD
+    window.alert("Goodmorning Astronaut, are you ready to play? \nIn order to win the game, you need to reach the last platform.\nWatch out for the pits on the ground! \n\nPress 'd' to go right, 'a' to go left and 'w' to jump.\n\nGood luck ;D")
+
+} else if (window.screen.availWidth <= 768){
+
+    // define mobile canvas size (max?)
+
+    canvas.width = window.screen.availWidth
+    canvas.height = window.screen.availHeight
+
+
+    // div left
+
+    const leftSide = document.getElementById("left")
+    leftSide.setAttribute("widht", "50%")
+    leftSide.setAttribute("position", "absolute")
+    leftSide.setAttribute("height", "500px")
+    leftSide.setAttribute("left", "50%")
+
+
+    // div right
+
+    const rightSide = document.getElementById("right")
+    rightSide.setAttribute("widht", "50%")
+    rightSide.setAttribute("position", "absolute")
+    rightSide.setAttribute("height", "500px")
+
+
+    // right side touch event
+
+    rightSide.addEventListener("touchstart",()=>{
+        keys.right.pressed = true
+        player.currentSprite = player.sprites.run.right
+        player.currentCropWidth = player.sprites.run.cropWidth
+        player.width = player.sprites.run.width
+    })
+
+    rightSide.addEventListener("touchmove",()=>{
+        if (player.position.y > 110){
+            player.velocity.y -= 25
+        }
+        pullEffect.currentTime = 0.4
+        pullEffect.play()
+    })
+
+    rightSide.addEventListener("touchend",()=>{
+        keys.left.pressed = false
+        player.currentSprite = player.sprites.stand.left
+        player.currentCropWidth = player.sprites.stand.cropWidth
+        player.width = player.sprites.stand.width
+    })
+
+    // left side touch event
+
+    leftSide.addEventListener("touchstart",()=>{
+                keys.right.pressed = true
+                player.currentSprite = player.sprites.run.right
+                player.currentCropWidth = player.sprites.run.cropWidth
+                player.width = player.sprites.run.width
+    })
+
+
+    leftSide.addEventListener("touchend",()=>{
+        keys.right.pressed = false
+        player.currentSprite = player.sprites.stand.right
+        player.currentCropWidth = player.sprites.stand.cropWidth
+        player.width = player.sprites.stand.width
+    })
+
+    // alert box AWD
+    window.alert("Goodmorning Astronaut, are you ready to play? \nIn order to win the game, you need to reach the last platform.\nWatch out for the pits on the ground! \n\nTap the right side of the screen to go right, the left one to go left and tap twice on the right side to jump.\n\nGood luck ;D")
+
+}
 
 // Implement create image function
 
@@ -50,6 +178,23 @@ spriteStandLeftImg.setAttribute("src", "./img/spriteStandLeft.png")
 const spriteStandRightImg = new Image
 spriteStandRightImg.setAttribute("src", "./img/spriteStandRight.png")
 
+const playlist = ["./audio/game_soundtrack.mp3", "", "", "", ""]
+
+const pullEffect = new Audio
+pullEffect.setAttribute("src", "./audio/pullEffect.ogg")
+
+function jukebox() {
+    const soundTrack = new Audio
+    soundTrack.setAttribute("src", playlist[0]) //Math.floor(Math.random()*10)
+    soundTrack.load()
+    soundTrack.setAttribute("preload", "auto");
+    soundTrack.autobuffer = true;    
+    soundTrack.volume = 0.06
+    soundTrack.currentTime = 55
+    soundTrack.play()
+}
+
+jukebox()
 
 // define gravity const
 const gravity = 1.5
@@ -223,6 +368,31 @@ new Platform({
     x: platformImg.naturalWidth * 5 + 650 - 2 , 
     y: 480, 
     image: platformImg,
+}),
+new Platform({
+    x: platformImg.naturalWidth * 6 + 800 - 2 , 
+    y: 280, 
+    image: platformImg,
+}),
+new Platform({
+    x: platformImg.naturalWidth * 8 + 650 - 2 , 
+    y: 480, 
+    image: platformImg,
+}),
+new Platform({
+    x: platformImg.naturalWidth * 9 + 900 , 
+    y: 290, 
+    image: platformImg,
+}),
+new Platform({
+    x: platformImg.naturalWidth * 11 + 900  - platformSmallTallImg.naturalWidth , 
+    y: 310, 
+    image: platformSmallTallImg,
+}),
+new Platform({
+    x: platformImg.naturalWidth * 11 + 1300 , 
+    y: 480, 
+    image: platformImg,
 })
 ]
 
@@ -285,7 +455,7 @@ function animate(){
     }
 
     // win condition
-    if (scrollOffset > platformImg.naturalWidth * 5 + 250 - 2){
+    if (scrollOffset > platformImg.naturalWidth * 12){
         setTimeout(() => {
             window.alert("You win! Play again")
             location.reload()
@@ -312,58 +482,6 @@ function animate(){
 
 // invoke animate
 animate()
-
-// Event listener keydown
-window.addEventListener("keydown", ({ key }) => {
-    switch(key){
-        case "a":
-            // console.log("left")
-            keys.left.pressed = true
-            player.currentSprite = player.sprites.run.left
-            player.currentCropWidth = player.sprites.run.cropWidth
-            player.width = player.sprites.run.width
-            // lastKeyPressed = "left"
-            break;
-        case "w":
-            // console.log("up")
-            // define jump -> position -20 + 1.5 di gravity ... position + 0 ... position - gravity till velocity = 0
-            // no double jump
-            if (player.position.y > 110){
-                player.velocity.y -= 25
-            }
-            break;
-        case "d":
-            // console.log("right")
-            keys.right.pressed = true
-            player.currentSprite = player.sprites.run.right
-            player.currentCropWidth = player.sprites.run.cropWidth
-            player.width = player.sprites.run.width
-            // lastKeyPressed = "right"
-            break;
-    }
-})
-
-// event listener keyup
-window.addEventListener("keyup", ({ key }) => {
-    switch(key){
-        case "a":
-            // console.log("left")
-            keys.left.pressed = false
-            player.currentSprite = player.sprites.stand.left
-            player.currentCropWidth = player.sprites.stand.cropWidth
-            player.width = player.sprites.stand.width
-            // lastKeyPressed = "left"
-            break;
-        case "d":
-            // console.log("right")
-            keys.right.pressed = false
-            player.currentSprite = player.sprites.stand.right
-            player.currentCropWidth = player.sprites.stand.cropWidth
-            player.width = player.sprites.stand.width
-            // lastKeyPressed = "right"
-            break;
-    }
-})
 
 
 // let lastKeyPressed
