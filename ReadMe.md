@@ -10,6 +10,12 @@ Anyway, the point of the game is guiding your austronaut-character to the last p
 
 I took the liberty of putting one of my fav album as soundtrack - it's called Cenizas by Nicolas Jaar, check it out!
 
+Here you can find the project pesentation ini Portuguese: 
+https://docs.google.com/presentation/d/1bDS__YUWclTCG2QNutcAJ8DhdNtMlExy6Jxj4p9gi2Y/edit?usp=sharing
+
+And there is the link to the deploy of the game:
+https://aleespo.github.io/trip-to-neptune/
+
 Please write me at alessandro.esposito.brescia@gmail.com for any info
 
 

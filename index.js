@@ -138,7 +138,7 @@ canvas.height = 576 ;
 //     })
 
     // alert box AWD
-    window.alert("Goodmorning Astronaut, are you ready to play? \nIn order to win the game, you need to reach the last platform.\nWatch out for the pits on the ground! \n\nTap the right side of the screen to go right, the left one to go left and tap twice on the right side to jump.\n\nGood luck ;D")
+    window.alert("Goodmorning Astronaut, are you ready to play? \nIn order to win the game, you need to reach the last platform.\nWatch out for the pits on the ground! \n\nTap the right side of the screen to go right, the left one to go left and tap twice on the right side to jump.\n\nGood luck ;D\n\nPS: depending on the browser you are using, there might be a little bug. Please refresh the page as soon as you enter the game!")
 
 // }
 
