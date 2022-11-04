@@ -67,8 +67,8 @@ if (window.screen.availWidth > 768){
 
     // define mobile canvas size (max?)
 
-    canvas.width = window.screen.availWidth
-    canvas.height = window.screen.availHeight
+    canvas.width = window.screen.availHeight
+    canvas.height = window.screen.availWidth
 
 
     // div left
